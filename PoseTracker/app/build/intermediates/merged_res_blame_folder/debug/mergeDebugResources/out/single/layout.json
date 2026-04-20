@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.posetracker.app-mergeDebugResources-51:/layout/activity_main.xml",
+        "source": "com.posetracker.app-main-54:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.posetracker.app-mergeDebugResources-51:/layout/fragment_pose.xml",
+        "source": "com.posetracker.app-main-54:/layout/fragment_pose.xml"
+    },
+    {
+        "merged": "com.posetracker.app-mergeDebugResources-51:/layout/fragment_connection.xml",
+        "source": "com.posetracker.app-main-54:/layout/fragment_connection.xml"
+    }
+]

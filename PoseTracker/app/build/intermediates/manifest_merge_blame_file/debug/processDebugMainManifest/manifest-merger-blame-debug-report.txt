@@ -1,0 +1,206 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.posetracker"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Permissions -->
+12    <uses-permission android:name="android.permission.CAMERA" />
+12-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:5:5-65
+12-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:5:22-62
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:6:5-67
+13-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:6:22-64
+14
+15    <uses-feature
+15-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:8:5-84
+16        android:name="android.hardware.camera"
+16-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:8:19-57
+17        android:required="true" />
+17-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:8:58-81
+18
+19    <permission
+19-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
+20        android:name="com.posetracker.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+20-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
+21        android:protectionLevel="signature" />
+21-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+22
+23    <uses-permission android:name="com.posetracker.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+23-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
+23-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
+24    <!-- <uses-sdk android:minSdkVersion="14"/> -->
+25    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+25-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:25:5-79
+25-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:25:22-76
+26
+27    <application
+27-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:10:5-28:19
+28        android:allowBackup="true"
+28-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:11:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:icon="@mipmap/ic_launcher"
+32-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:12:9-43
+33        android:label="@string/app_name"
+33-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:13:9-41
+34        android:roundIcon="@mipmap/ic_launcher_round"
+34-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:14:9-54
+35        android:supportsRtl="true"
+35-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:15:9-35
+36        android:testOnly="true"
+37        android:theme="@style/Theme.PoseTracker" >
+37-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:16:9-49
+38        <activity
+38-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:18:9-26:20
+39            android:name="com.posetracker.MainActivity"
+39-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:19:13-41
+40            android:exported="true"
+40-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:20:13-36
+41            android:screenOrientation="portrait" >
+41-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:21:13-49
+42            <intent-filter>
+42-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:22:13-25:29
+43                <action android:name="android.intent.action.MAIN" />
+43-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:23:17-69
+43-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:23:25-66
+44
+45                <category android:name="android.intent.category.LAUNCHER" />
+45-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:24:17-77
+45-->C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\AndroidManifest.xml:24:27-74
+46            </intent-filter>
+47        </activity>
+48
+49        <service
+49-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:24:9-33:19
+50            android:name="androidx.camera.core.impl.MetadataHolderService"
+50-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:25:13-75
+51            android:enabled="false"
+51-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:26:13-36
+52            android:exported="false" >
+52-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:27:13-37
+53            <meta-data
+53-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:30:13-32:89
+54                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+54-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:31:17-103
+55                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+55-->[androidx.camera:camera-camera2:1.3.1] C:\Users\nelso\.gradle\caches\9.0.0\transforms\d6297d3ee29570bfefc7956ec7e08ccc\transformed\camera-camera2-1.3.1\AndroidManifest.xml:32:17-86
+56        </service>
+57
+58        <provider
+58-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+59            android:name="androidx.startup.InitializationProvider"
+59-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+60            android:authorities="com.posetracker.androidx-startup"
+60-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+61            android:exported="false" >
+61-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+62            <meta-data
+62-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+63                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+63-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+64                android:value="androidx.startup" />
+64-->[androidx.emoji2:emoji2:1.2.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\203ec2854600b1f0b4190e6592fc1254\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+65            <meta-data
+65-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\9b95e9f7f03ec833bf6983488e5bd003\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+66                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+66-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\9b95e9f7f03ec833bf6983488e5bd003\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+67                android:value="androidx.startup" />
+67-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\9b95e9f7f03ec833bf6983488e5bd003\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+68            <meta-data
+68-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+69                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+69-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+70                android:value="androidx.startup" />
+70-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+71        </provider>
+72
+73        <uses-library
+73-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+74            android:name="androidx.window.extensions"
+74-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+75            android:required="false" />
+75-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+76        <uses-library
+76-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+77            android:name="androidx.window.sidecar"
+77-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+78            android:required="false" />
+78-->[androidx.window:window:1.0.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\a59ea4269a98b7daf9d7107ed6ccd01c\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+79
+80        <receiver
+80-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+81            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+81-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+82            android:directBootAware="false"
+82-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+83            android:enabled="true"
+83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+84            android:exported="true"
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+85            android:permission="android.permission.DUMP" >
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+86            <intent-filter>
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+87                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+88            </intent-filter>
+89            <intent-filter>
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+90                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+91            </intent-filter>
+92            <intent-filter>
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+93                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+94            </intent-filter>
+95            <intent-filter>
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+96                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\bde6f135380daa68c33acd117bd3b049\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+97            </intent-filter>
+98        </receiver>
+99
+100        <service
+100-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:29:9-35:19
+101            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+101-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:30:13-103
+102            android:exported="false" >
+102-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:31:13-37
+103            <meta-data
+103-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:32:13-34:39
+104                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+104-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:33:17-94
+105                android:value="cct" />
+105-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:34:17-36
+106        </service>
+107        <service
+107-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:26:9-30:19
+108            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+108-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:27:13-117
+109            android:exported="false"
+109-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:28:13-37
+110            android:permission="android.permission.BIND_JOB_SERVICE" >
+110-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:29:13-69
+111        </service>
+112
+113        <receiver
+113-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:32:9-34:40
+114            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+114-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:33:13-132
+115            android:exported="false" />
+115-->[com.google.android.datatransport:transport-runtime:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\02801ee2801c90fa22ffad626fac77c6\transformed\transport-runtime-3.1.0\AndroidManifest.xml:34:13-37
+116    </application>
+117
+118</manifest>

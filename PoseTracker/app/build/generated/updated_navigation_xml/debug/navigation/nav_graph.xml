@@ -1,0 +1,36 @@
+<navigation
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/nav_graph"
+app:startDestination="@id/connectionFragment" >
+<fragment
+    android:id="@+id/connectionFragment"
+    android:name="com.posetracker.ui.connection.ConnectionFragment"
+    android:label="Connect"
+    tools:layout="@layout/fragment_connection" >
+
+    <action
+        android:id="@+id/action_connectionFragment_to_poseFragment"
+        app:destination="@id/poseFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+</fragment>
+<fragment
+    android:id="@+id/poseFragment"
+    android:name="com.posetracker.ui.pose.PoseFragment"
+    android:label="Pose Tracker"
+    tools:layout="@layout/fragment_pose" >
+
+    <argument
+        android:name="address"
+        app:argType="string" />
+    <argument
+        android:name="port"
+        app:argType="integer" />
+
+</fragment>
+</navigation>

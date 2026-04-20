@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PoseTracker</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="server_address">Server Address</string>
+    <string name="port">Port</string>
+    <string name="connecting">Connecting…</string>
+    <string name="waiting_for_pose">Waiting for pose…</string>
+</resources>

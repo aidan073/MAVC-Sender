@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.posetracker.app-mergeDebugResources-50:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\nelso\\.gradle\\caches\\9.0.0\\transforms\\5bff3a2c2ce08f0156f5f82f8378d4c3\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}
