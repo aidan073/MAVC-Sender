@@ -46,11 +46,11 @@ com.posetracker.app-appcompat-resources-1.6.1-44 C:\Users\nelso\.gradle\caches\9
 com.posetracker.app-startup-runtime-1.1.1-45 C:\Users\nelso\.gradle\caches\9.0.0\transforms\f043a22758291e49edd3e5fede9c79d9\transformed\startup-runtime-1.1.1\res
 com.posetracker.app-activity-1.8.0-46 C:\Users\nelso\.gradle\caches\9.0.0\transforms\f175fdea2fc5d8dd575b790ba462b445\transformed\activity-1.8.0\res
 com.posetracker.app-cardview-1.0.0-47 C:\Users\nelso\.gradle\caches\9.0.0\transforms\f473bf3d297803cca686331efcaa3711\transformed\cardview-1.0.0\res
-com.posetracker.app-pngs-48 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\generated\res\pngs\debug
-com.posetracker.app-resValues-49 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\generated\res\resValues\debug
-com.posetracker.app-updated_navigation_xml-50 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\generated\updated_navigation_xml\debug
-com.posetracker.app-packageDebugResources-51 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.posetracker.app-packageDebugResources-52 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.posetracker.app-debug-53 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\intermediates\merged_res\debug\mergeDebugResources
-com.posetracker.app-debug-54 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\debug\res
-com.posetracker.app-main-55 C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\src\main\res
+com.posetracker.app-pngs-48 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\generated\res\pngs\debug
+com.posetracker.app-resValues-49 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\generated\res\resValues\debug
+com.posetracker.app-updated_navigation_xml-50 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\generated\updated_navigation_xml\debug
+com.posetracker.app-packageDebugResources-51 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.posetracker.app-packageDebugResources-52 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.posetracker.app-debug-53 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.posetracker.app-debug-54 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\debug\res
+com.posetracker.app-main-55 C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\res

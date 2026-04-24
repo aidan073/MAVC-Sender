@@ -1,1 +1,0 @@
-C:\Users\nelso\Desktop\Schoolwork 2, the Schoolening\2026a, Spring\Software Engineering\Project\PoseTracker\PoseTracker\app\build\intermediates\compiled_navigation_res\debug\compileDebugNavigationResources\navigation_nav_graph.xml.flat 

@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -34,8 +33,9 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private val args: PoseFragmentArgs by navArgs()
     private val viewModel: PoseViewModel by viewModels()
 
+    // Single-thread executor — MediaPipe is created, used, and closed on this same thread
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var poseLandmarkerHelper: PoseLandmarkerHelper
+    private var poseLandmarkerHelper: PoseLandmarkerHelper? = null
     private var imageAnalyzer: ImageAnalysis? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
@@ -61,9 +61,7 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Initialize ViewModel with connection info
         viewModel.initialize(args.address, args.port)
-
         binding.tvConnectionStatus.text = "Connected to ${args.address}:${args.port}"
 
         binding.btnDisconnect.setOnClickListener {
@@ -71,7 +69,6 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             findNavController().popBackStack()
         }
 
-        // Observe pose data being sent
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.sendStatus.collect { status ->
@@ -80,7 +77,6 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             }
         }
 
-        // Check / request camera permission
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_GRANTED
         ) {
@@ -91,12 +87,9 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun startCamera() {
-        poseLandmarkerHelper = PoseLandmarkerHelper(
-            context = requireContext(),
-            listener = this
-        )
+        val context = requireContext().applicationContext
 
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
@@ -108,9 +101,18 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor) { imageProxy ->
-                        poseLandmarkerHelper.detectLiveStream(imageProxy)
+                .also { analysis ->
+                    analysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                        // Lazily create PoseLandmarkerHelper on the executor thread the
+                        // first time a frame arrives — creation and detectAsync then share
+                        // the same thread, which MediaPipe LIVE_STREAM mode requires.
+                        if (poseLandmarkerHelper == null) {
+                            poseLandmarkerHelper = PoseLandmarkerHelper(
+                                context = context,
+                                listener = this
+                            )
+                        }
+                        poseLandmarkerHelper?.detectLiveStream(imageProxy)
                     }
                 }
 
@@ -125,19 +127,15 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             } catch (e: Exception) {
                 Log.e(TAG, "Camera bind failed", e)
             }
-        }, ContextCompat.getMainExecutor(requireContext()))
+        }, ContextCompat.getMainExecutor(context))
     }
 
-    // ── PoseLandmarkerHelper.LandmarkerListener ──────────────────────────────
-
     override fun onResults(result: PoseLandmarkerHelper.PoseResult) {
-        // Draw skeleton overlay
         binding.overlayView.setResults(
             result.landmarks,
             result.imageWidth,
             result.imageHeight
         )
-        // Send over network
         viewModel.sendPoseData(result)
     }
 
@@ -149,7 +147,11 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (::poseLandmarkerHelper.isInitialized) poseLandmarkerHelper.close()
+        // Close MediaPipe on the same executor thread it was created on
+        cameraExecutor.execute {
+            poseLandmarkerHelper?.close()
+            poseLandmarkerHelper = null
+        }
         cameraExecutor.shutdown()
         _binding = null
     }

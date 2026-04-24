@@ -2,31 +2,23 @@ package com.posetracker.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.PrintWriter
+import java.io.OutputStream
 import java.net.Socket
 import java.net.SocketException
 
-/**
- * Singleton that manages a single TCP socket connection.
- * All I/O is dispatched on [Dispatchers.IO].
- */
 object SocketManager {
 
     private var socket: Socket? = null
-    private var writer: PrintWriter? = null
+    private var outputStream: OutputStream? = null
 
-    /**
-     * Opens a TCP connection to [address]:[port].
-     * Returns [Result.success] on success, [Result.failure] with the exception on failure.
-     */
     suspend fun connect(address: String, port: Int): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
-                disconnect()                          // close any existing connection
+                disconnectInternal()
                 val s = Socket(address, port)
                 s.keepAlive = true
-                s.soTimeout = 0                       // no read timeout for streaming
-                writer = PrintWriter(s.getOutputStream(), true)
+                s.soTimeout = 0
+                outputStream = s.getOutputStream()
                 socket = s
                 Result.success(Unit)
             } catch (e: Exception) {
@@ -34,26 +26,25 @@ object SocketManager {
             }
         }
 
-    /**
-     * Sends a newline-terminated JSON string over the socket.
-     * Returns true if sent successfully.
-     */
-    suspend fun send(json: String): Boolean =
+    suspend fun sendBytes(data: ByteArray): Boolean =
         withContext(Dispatchers.IO) {
             try {
-                val w = writer ?: return@withContext false
-                w.println(json)          // println appends '\n' — easy to parse server-side
-                !w.checkError()
-            } catch (e: SocketException) {
+                val os = outputStream ?: return@withContext false
+                os.write(data)
+                os.flush()
+                true
+            } catch (e: Exception) {
                 false
             }
         }
 
-    /** Closes the socket and resets state. Safe to call multiple times. */
-    fun disconnect() {
-        try { writer?.close() } catch (_: Exception) {}
+    /** Call from a coroutine — safely dispatches to IO thread. */
+    suspend fun disconnect() = withContext(Dispatchers.IO) { disconnectInternal() }
+
+    private fun disconnectInternal() {
+        try { outputStream?.close() } catch (_: Exception) {}
         try { socket?.close() } catch (_: Exception) {}
-        writer = null
+        outputStream = null
         socket = null
     }
 

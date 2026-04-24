@@ -4,6 +4,10 @@
         "source": "com.posetracker.app-main-54:/mipmap-xhdpi/ic_launcher_round.png"
     },
     {
+        "merged": "com.posetracker.app-debug-52:/anim_slide_in_right.xml.flat",
+        "source": "com.posetracker.app-main-54:/anim/slide_in_right.xml"
+    },
+    {
         "merged": "com.posetracker.app-debug-52:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "com.posetracker.app-main-54:/mipmap-xxhdpi/ic_launcher.png"
     },
@@ -12,8 +16,8 @@
         "source": "com.posetracker.app-main-54:/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\anim_slide_out_left.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\anim\\slide_out_left.xml"
+        "merged": "com.posetracker.app-debug-52:/anim_slide_out_left.xml.flat",
+        "source": "com.posetracker.app-main-54:/anim/slide_out_left.xml"
     },
     {
         "merged": "com.posetracker.app-debug-52:/mipmap-xxxhdpi_ic_launcher.png.flat",
@@ -28,32 +32,32 @@
         "source": "com.posetracker.app-main-54:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\layout_fragment_connection.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\layout\\fragment_connection.xml"
+        "merged": "com.posetracker.app-debug-52:/layout_activity_main.xml.flat",
+        "source": "com.posetracker.app-main-54:/layout/activity_main.xml"
     },
     {
         "merged": "com.posetracker.app-debug-52:/mipmap-hdpi_ic_launcher_round.png.flat",
         "source": "com.posetracker.app-main-54:/mipmap-hdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\layout_fragment_pose.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\layout\\fragment_pose.xml"
+        "merged": "com.posetracker.app-debug-52:/anim_slide_in_left.xml.flat",
+        "source": "com.posetracker.app-main-54:/anim/slide_in_left.xml"
     },
     {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\anim_slide_in_right.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\anim\\slide_in_right.xml"
+        "merged": "com.posetracker.app-debug-52:/layout_fragment_pose.xml.flat",
+        "source": "com.posetracker.app-main-54:/layout/fragment_pose.xml"
     },
     {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\anim_slide_in_left.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\anim\\slide_in_left.xml"
-    },
-    {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\anim_slide_out_right.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\anim\\slide_out_right.xml"
+        "merged": "com.posetracker.app-debug-52:/anim_slide_out_right.xml.flat",
+        "source": "com.posetracker.app-main-54:/anim/slide_out_right.xml"
     },
     {
         "merged": "com.posetracker.app-debug-52:/mipmap-hdpi_ic_launcher.png.flat",
         "source": "com.posetracker.app-main-54:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.posetracker.app-debug-52:/layout_fragment_connection.xml.flat",
+        "source": "com.posetracker.app-main-54:/layout/fragment_connection.xml"
     },
     {
         "merged": "com.posetracker.app-debug-52:/mipmap-mdpi_ic_launcher_round.png.flat",
@@ -62,9 +66,5 @@
     {
         "merged": "com.posetracker.app-debug-52:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
         "source": "com.posetracker.app-main-54:/mipmap-xxxhdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-debug-52:\\layout_activity_main.xml.flat",
-        "source": "C:\\Users\\nelso\\.gradle\\daemon\\9.0.0\\com.posetracker.app-main-54:\\layout\\activity_main.xml"
     }
 ]

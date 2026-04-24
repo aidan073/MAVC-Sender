@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.SystemClock
-import androidx.annotation.VisibleForTesting
+import android.util.Log
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
@@ -13,7 +13,6 @@ import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
-import com.google.gson.Gson
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 class PoseLandmarkerHelper(
@@ -25,34 +24,41 @@ class PoseLandmarkerHelper(
 ) {
 
     private var poseLandmarker: PoseLandmarker? = null
-    private val gson = Gson()
 
     init {
         setupPoseLandmarker()
     }
 
-    private fun setupPoseLandmarker() {
+    private fun buildOptions(delegate: Delegate): PoseLandmarker.PoseLandmarkerOptions {
         val baseOptions = BaseOptions.builder()
             .setModelAssetPath(MODEL_POSE_LANDMARKER_FULL)
-            .setDelegate(Delegate.GPU)
+            .setDelegate(delegate)
             .build()
-
-        val options = PoseLandmarker.PoseLandmarkerOptions.builder()
+        return PoseLandmarker.PoseLandmarkerOptions.builder()
             .setBaseOptions(baseOptions)
             .setMinPoseDetectionConfidence(minPoseDetectionConfidence)
             .setMinTrackingConfidence(minPoseTrackingConfidence)
             .setMinPosePresenceConfidence(minPosePresenceConfidence)
             .setNumPoses(1)
             .setRunningMode(RunningMode.LIVE_STREAM)
-            .setResultListener { result, input ->
-                returnLivestreamResult(result, input)
-            }
-            .setErrorListener { error ->
-                listener.onError(error.message ?: "MediaPipe error")
-            }
+            .setResultListener { result, input -> returnLivestreamResult(result, input) }
+            .setErrorListener { error -> listener.onError(error.message ?: "MediaPipe error") }
             .build()
+    }
 
-        poseLandmarker = PoseLandmarker.createFromOptions(context, options)
+    private fun setupPoseLandmarker() {
+        // Try GPU first; fall back to CPU if the device doesn't support it
+        poseLandmarker = try {
+            PoseLandmarker.createFromOptions(context, buildOptions(Delegate.GPU))
+        } catch (e: Exception) {
+            Log.w(TAG, "GPU delegate unavailable, falling back to CPU: ${e.message}")
+            try {
+                PoseLandmarker.createFromOptions(context, buildOptions(Delegate.CPU))
+            } catch (e2: Exception) {
+                listener.onError("Failed to initialise MediaPipe: ${e2.message}")
+                null
+            }
+        }
     }
 
     fun detectLiveStream(imageProxy: ImageProxy) {
@@ -99,27 +105,7 @@ class PoseLandmarkerHelper(
         val imageWidth: Int,
         val imageHeight: Int,
         val timestampMs: Long
-    ) {
-        /** Serializes landmarks to a compact JSON string ready to send over the socket. */
-        fun toJson(): String {
-            val landmarkData = landmarks.mapIndexed { index, lm ->
-                mapOf(
-                    "i" to index,
-                    "x" to lm.x(),
-                    "y" to lm.y(),
-                    "z" to lm.z(),
-                    "v" to lm.visibility().orElse(0f)
-                )
-            }
-            val payload = mapOf(
-                "ts" to timestampMs,
-                "w" to imageWidth,
-                "h" to imageHeight,
-                "landmarks" to landmarkData
-            )
-            return com.google.gson.Gson().toJson(payload)
-        }
-    }
+    )
 
     interface LandmarkerListener {
         fun onResults(result: PoseResult)
@@ -127,8 +113,7 @@ class PoseLandmarkerHelper(
     }
 
     companion object {
-        // Download from: https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task
-        // Place in app/src/main/assets/
+        private const val TAG = "PoseLandmarkerHelper"
         const val MODEL_POSE_LANDMARKER_FULL = "pose_landmarker_full.task"
     }
 }
