@@ -31,6 +31,9 @@ app:startDestination="@id/connectionFragment" >
     <argument
         android:name="port"
         app:argType="integer" />
+    <argument
+        android:name="armSide"
+        app:argType="string" />
 
 </fragment>
 </navigation>

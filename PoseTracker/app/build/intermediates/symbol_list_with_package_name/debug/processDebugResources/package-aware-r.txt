@@ -3247,6 +3247,9 @@ id bounceEnd
 id bounceStart
 id btnConnect
 id btnDisconnect
+id btnFlipCamera
+id btnLeft
+id btnRight
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3635,6 +3638,7 @@ id title
 id titleDividerNoCustom
 id title_template
 id toggle
+id toggleArm
 id top
 id topPanel
 id touch_outside

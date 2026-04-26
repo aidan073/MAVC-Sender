@@ -56,6 +56,18 @@
                 android:textSize="13sp"
                 android:text="Connecting…" />
 
+            <!-- Flip camera button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFlipCamera"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flip"
+                android:textColor="#00E5FF"
+                app:strokeColor="#00E5FF"
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="8dp" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDisconnect"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"

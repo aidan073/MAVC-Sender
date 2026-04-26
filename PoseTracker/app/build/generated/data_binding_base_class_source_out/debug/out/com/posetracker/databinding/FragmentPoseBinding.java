@@ -27,6 +27,9 @@ public final class FragmentPoseBinding implements ViewBinding {
   public final MaterialButton btnDisconnect;
 
   @NonNull
+  public final MaterialButton btnFlipCamera;
+
+  @NonNull
   public final OverlayView overlayView;
 
   @NonNull
@@ -42,11 +45,13 @@ public final class FragmentPoseBinding implements ViewBinding {
   public final PreviewView viewFinder;
 
   private FragmentPoseBinding(@NonNull ConstraintLayout rootView,
-      @NonNull MaterialButton btnDisconnect, @NonNull OverlayView overlayView,
-      @NonNull MaterialCardView statusCard, @NonNull TextView tvConnectionStatus,
-      @NonNull TextView tvSendStatus, @NonNull PreviewView viewFinder) {
+      @NonNull MaterialButton btnDisconnect, @NonNull MaterialButton btnFlipCamera,
+      @NonNull OverlayView overlayView, @NonNull MaterialCardView statusCard,
+      @NonNull TextView tvConnectionStatus, @NonNull TextView tvSendStatus,
+      @NonNull PreviewView viewFinder) {
     this.rootView = rootView;
     this.btnDisconnect = btnDisconnect;
+    this.btnFlipCamera = btnFlipCamera;
     this.overlayView = overlayView;
     this.statusCard = statusCard;
     this.tvConnectionStatus = tvConnectionStatus;
@@ -87,6 +92,12 @@ public final class FragmentPoseBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnFlipCamera;
+      MaterialButton btnFlipCamera = ViewBindings.findChildViewById(rootView, id);
+      if (btnFlipCamera == null) {
+        break missingId;
+      }
+
       id = R.id.overlayView;
       OverlayView overlayView = ViewBindings.findChildViewById(rootView, id);
       if (overlayView == null) {
@@ -117,8 +128,8 @@ public final class FragmentPoseBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentPoseBinding((ConstraintLayout) rootView, btnDisconnect, overlayView,
-          statusCard, tvConnectionStatus, tvSendStatus, viewFinder);
+      return new FragmentPoseBinding((ConstraintLayout) rootView, btnDisconnect, btnFlipCamera,
+          overlayView, statusCard, tvConnectionStatus, tvSendStatus, viewFinder);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

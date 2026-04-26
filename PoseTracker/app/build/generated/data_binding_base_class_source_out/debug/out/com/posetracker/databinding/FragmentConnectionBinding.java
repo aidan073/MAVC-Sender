@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,6 +27,12 @@ public final class FragmentConnectionBinding implements ViewBinding {
 
   @NonNull
   public final MaterialButton btnConnect;
+
+  @NonNull
+  public final MaterialButton btnLeft;
+
+  @NonNull
+  public final MaterialButton btnRight;
 
   @NonNull
   public final MaterialCardView card;
@@ -46,24 +53,32 @@ public final class FragmentConnectionBinding implements ViewBinding {
   public final TextInputLayout tilPort;
 
   @NonNull
+  public final MaterialButtonToggleGroup toggleArm;
+
+  @NonNull
   public final TextView tvSubtitle;
 
   @NonNull
   public final TextView tvTitle;
 
   private FragmentConnectionBinding(@NonNull ConstraintLayout rootView,
-      @NonNull MaterialButton btnConnect, @NonNull MaterialCardView card,
+      @NonNull MaterialButton btnConnect, @NonNull MaterialButton btnLeft,
+      @NonNull MaterialButton btnRight, @NonNull MaterialCardView card,
       @NonNull TextInputEditText etAddress, @NonNull TextInputEditText etPort,
       @NonNull CircularProgressIndicator progressBar, @NonNull TextInputLayout tilAddress,
-      @NonNull TextInputLayout tilPort, @NonNull TextView tvSubtitle, @NonNull TextView tvTitle) {
+      @NonNull TextInputLayout tilPort, @NonNull MaterialButtonToggleGroup toggleArm,
+      @NonNull TextView tvSubtitle, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnConnect = btnConnect;
+    this.btnLeft = btnLeft;
+    this.btnRight = btnRight;
     this.card = card;
     this.etAddress = etAddress;
     this.etPort = etPort;
     this.progressBar = progressBar;
     this.tilAddress = tilAddress;
     this.tilPort = tilPort;
+    this.toggleArm = toggleArm;
     this.tvSubtitle = tvSubtitle;
     this.tvTitle = tvTitle;
   }
@@ -98,6 +113,18 @@ public final class FragmentConnectionBinding implements ViewBinding {
       id = R.id.btnConnect;
       MaterialButton btnConnect = ViewBindings.findChildViewById(rootView, id);
       if (btnConnect == null) {
+        break missingId;
+      }
+
+      id = R.id.btnLeft;
+      MaterialButton btnLeft = ViewBindings.findChildViewById(rootView, id);
+      if (btnLeft == null) {
+        break missingId;
+      }
+
+      id = R.id.btnRight;
+      MaterialButton btnRight = ViewBindings.findChildViewById(rootView, id);
+      if (btnRight == null) {
         break missingId;
       }
 
@@ -137,6 +164,12 @@ public final class FragmentConnectionBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.toggleArm;
+      MaterialButtonToggleGroup toggleArm = ViewBindings.findChildViewById(rootView, id);
+      if (toggleArm == null) {
+        break missingId;
+      }
+
       id = R.id.tvSubtitle;
       TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
       if (tvSubtitle == null) {
@@ -149,8 +182,9 @@ public final class FragmentConnectionBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentConnectionBinding((ConstraintLayout) rootView, btnConnect, card, etAddress,
-          etPort, progressBar, tilAddress, tilPort, tvSubtitle, tvTitle);
+      return new FragmentConnectionBinding((ConstraintLayout) rootView, btnConnect, btnLeft,
+          btnRight, card, etAddress, etPort, progressBar, tilAddress, tilPort, toggleArm,
+          tvSubtitle, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

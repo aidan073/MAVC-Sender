@@ -7,7 +7,6 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -17,6 +16,7 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 class PoseLandmarkerHelper(
     private val context: Context,
+    private val isFrontCamera: Boolean = true,
     private val minPoseDetectionConfidence: Float = 0.5f,
     private val minPoseTrackingConfidence: Float = 0.5f,
     private val minPosePresenceConfidence: Float = 0.5f,
@@ -30,6 +30,12 @@ class PoseLandmarkerHelper(
     }
 
     private fun buildOptions(delegate: Delegate): PoseLandmarker.PoseLandmarkerOptions {
+        val assetList = context.assets.list("") ?: emptyArray()
+        if (MODEL_POSE_LANDMARKER_FULL !in assetList) {
+            throw IllegalStateException(
+                "Model file '$MODEL_POSE_LANDMARKER_FULL' not found in assets/."
+            )
+        }
         val baseOptions = BaseOptions.builder()
             .setModelAssetPath(MODEL_POSE_LANDMARKER_FULL)
             .setDelegate(delegate)
@@ -42,63 +48,74 @@ class PoseLandmarkerHelper(
             .setNumPoses(1)
             .setRunningMode(RunningMode.LIVE_STREAM)
             .setResultListener { result, input -> returnLivestreamResult(result, input) }
-            .setErrorListener { error -> listener.onError(error.message ?: "MediaPipe error") }
+            .setErrorListener { error ->
+                Log.e(TAG, "MediaPipe error: ${error.message}", error)
+                listener.onError("MediaPipe error: ${error.message}")
+            }
             .build()
     }
 
     private fun setupPoseLandmarker() {
-        // Try GPU first; fall back to CPU if the device doesn't support it
         poseLandmarker = try {
             PoseLandmarker.createFromOptions(context, buildOptions(Delegate.GPU))
+                .also { Log.d(TAG, "GPU delegate initialised OK") }
         } catch (e: Exception) {
-            Log.w(TAG, "GPU delegate unavailable, falling back to CPU: ${e.message}")
+            Log.w(TAG, "GPU failed, trying CPU: ${e.message}")
             try {
                 PoseLandmarker.createFromOptions(context, buildOptions(Delegate.CPU))
+                    .also { Log.d(TAG, "CPU delegate initialised OK") }
             } catch (e2: Exception) {
-                listener.onError("Failed to initialise MediaPipe: ${e2.message}")
+                Log.e(TAG, "CPU also failed", e2)
+                listener.onError("MediaPipe init failed: ${e2.message}")
                 null
             }
         }
     }
 
-    fun detectLiveStream(imageProxy: ImageProxy) {
-        val bitmapBuffer = Bitmap.createBitmap(
-            imageProxy.width, imageProxy.height, Bitmap.Config.ARGB_8888
-        )
-        imageProxy.use { bitmapBuffer.copyPixelsFromBuffer(imageProxy.planes[0].buffer) }
-
-        val matrix = Matrix().apply {
-            postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-            // Front camera: mirror horizontally
-            postScale(-1f, 1f, imageProxy.width / 2f, imageProxy.height / 2f)
+    fun detectLiveStream(imageProxy: ImageProxy): Bitmap? {
+        if (poseLandmarker == null) {
+            imageProxy.close()
+            return null
         }
 
-        val rotatedBitmap = Bitmap.createBitmap(
-            bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true
-        )
+        val bitmap = imageProxy.use { proxy ->
+            val raw = Bitmap.createBitmap(proxy.width, proxy.height, Bitmap.Config.ARGB_8888)
+            raw.copyPixelsFromBuffer(proxy.planes[0].buffer)
 
-        val mpImage = BitmapImageBuilder(rotatedBitmap).build()
-        val frameTime = SystemClock.uptimeMillis()
-        poseLandmarker?.detectAsync(mpImage, frameTime)
+            val matrix = Matrix().apply {
+                postRotate(proxy.imageInfo.rotationDegrees.toFloat())
+                // Only mirror horizontally for the front camera
+                if (isFrontCamera) {
+                    postScale(-1f, 1f, proxy.width / 2f, proxy.height / 2f)
+                }
+            }
+            Bitmap.createBitmap(raw, 0, 0, raw.width, raw.height, matrix, true)
+        }
+
+        val mpImage = BitmapImageBuilder(bitmap).build()
+        poseLandmarker?.detectAsync(mpImage, SystemClock.uptimeMillis())
+        return bitmap
     }
 
-    private fun returnLivestreamResult(result: PoseLandmarkerResult, input: MPImage) {
+    private fun returnLivestreamResult(
+        result: PoseLandmarkerResult,
+        input: com.google.mediapipe.framework.image.MPImage
+    ) {
         val landmarks = result.landmarks().firstOrNull() ?: emptyList()
-        val poseResult = PoseResult(
-            landmarks = landmarks,
-            imageWidth = input.width,
-            imageHeight = input.height,
-            timestampMs = result.timestampMs()
+        listener.onResults(
+            PoseResult(
+                landmarks   = landmarks,
+                imageWidth  = input.width,
+                imageHeight = input.height,
+                timestampMs = result.timestampMs()
+            )
         )
-        listener.onResults(poseResult)
     }
 
     fun close() {
         poseLandmarker?.close()
         poseLandmarker = null
     }
-
-    // ── Data classes ──────────────────────────────────────────────────────────
 
     data class PoseResult(
         val landmarks: List<NormalizedLandmark>,

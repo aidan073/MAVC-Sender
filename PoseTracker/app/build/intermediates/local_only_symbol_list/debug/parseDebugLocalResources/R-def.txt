@@ -26,6 +26,9 @@ color white
 id action_connectionFragment_to_poseFragment
 id btnConnect
 id btnDisconnect
+id btnFlipCamera
+id btnLeft
+id btnRight
 id card
 id connectionFragment
 id etAddress
@@ -38,6 +41,7 @@ id progressBar
 id statusCard
 id tilAddress
 id tilPort
+id toggleArm
 id tvConnectionStatus
 id tvSendStatus
 id tvSubtitle

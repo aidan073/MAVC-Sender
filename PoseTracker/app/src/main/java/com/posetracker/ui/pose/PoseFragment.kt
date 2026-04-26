@@ -3,6 +3,7 @@ package com.posetracker.ui.pose
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +21,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.posetracker.databinding.FragmentPoseBinding
+import com.posetracker.utils.HandLandmarkerHelper
 import com.posetracker.utils.PoseLandmarkerHelper
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
+class PoseFragment : Fragment(),
+    PoseLandmarkerHelper.LandmarkerListener,
+    HandLandmarkerHelper.HandListener {
 
     private var _binding: FragmentPoseBinding? = null
     private val binding get() = _binding!!
@@ -33,10 +37,11 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private val args: PoseFragmentArgs by navArgs()
     private val viewModel: PoseViewModel by viewModels()
 
-    // Single-thread executor — MediaPipe is created, used, and closed on this same thread
     private lateinit var cameraExecutor: ExecutorService
     private var poseLandmarkerHelper: PoseLandmarkerHelper? = null
-    private var imageAnalyzer: ImageAnalysis? = null
+    private var handLandmarkerHelper: HandLandmarkerHelper? = null
+
+    private var useFrontCamera = true
 
     private val cameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -61,19 +66,33 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        val armSide = ArmSide.valueOf(args.armSide)
+        viewModel.armSide = armSide
         viewModel.initialize(args.address, args.port)
-        binding.tvConnectionStatus.text = "Connected to ${args.address}:${args.port}"
+
+        binding.tvConnectionStatus.text =
+            "Connected to ${args.address}:${args.port} — ${armSide.name.lowercase()} arm"
 
         binding.btnDisconnect.setOnClickListener {
             viewModel.disconnect()
             findNavController().popBackStack()
         }
 
+        binding.btnFlipCamera.setOnClickListener {
+            useFrontCamera = !useFrontCamera
+            // Recreate MediaPipe helpers so mirror flip logic resets correctly
+            cameraExecutor.execute {
+                poseLandmarkerHelper?.close()
+                poseLandmarkerHelper = null
+                handLandmarkerHelper?.close()
+                handLandmarkerHelper = null
+            }
+            startCamera()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sendStatus.collect { status ->
-                    binding.tvSendStatus.text = status
-                }
+                viewModel.sendStatus.collect { binding.tvSendStatus.text = it }
             }
         }
 
@@ -87,32 +106,44 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun startCamera() {
-        val context = requireContext().applicationContext
+        val appContext = requireContext().applicationContext
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(appContext)
 
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
+
+            val cameraSelector = if (useFrontCamera)
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            else
+                CameraSelector.DEFAULT_BACK_CAMERA
 
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             }
 
-            imageAnalyzer = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            val imageAnalyzer = ImageAnalysis.Builder()
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also { analysis ->
                     analysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                        // Lazily create PoseLandmarkerHelper on the executor thread the
-                        // first time a frame arrives — creation and detectAsync then share
-                        // the same thread, which MediaPipe LIVE_STREAM mode requires.
                         if (poseLandmarkerHelper == null) {
                             poseLandmarkerHelper = PoseLandmarkerHelper(
-                                context = context,
+                                context  = appContext,
+                                isFrontCamera = useFrontCamera,
                                 listener = this
                             )
                         }
-                        poseLandmarkerHelper?.detectLiveStream(imageProxy)
+                        if (handLandmarkerHelper == null) {
+                            handLandmarkerHelper = HandLandmarkerHelper(
+                                context        = appContext,
+                                targetHandSide = viewModel.armSide.name,
+                                listener       = this
+                            )
+                        }
+                        val bitmap = poseLandmarkerHelper?.detectLiveStream(imageProxy)
+                            ?: run { imageProxy.close(); return@setAnalyzer }
+                        handLandmarkerHelper?.detectFromBitmap(bitmap, SystemClock.uptimeMillis())
                     }
                 }
 
@@ -120,37 +151,43 @@ class PoseFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     viewLifecycleOwner,
-                    CameraSelector.DEFAULT_FRONT_CAMERA,
+                    cameraSelector,
                     preview,
                     imageAnalyzer
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "Camera bind failed", e)
             }
-        }, ContextCompat.getMainExecutor(context))
+        }, ContextCompat.getMainExecutor(appContext))
     }
 
     override fun onResults(result: PoseLandmarkerHelper.PoseResult) {
-        binding.overlayView.setResults(
-            result.landmarks,
-            result.imageWidth,
-            result.imageHeight
-        )
+        binding.overlayView.setResults(result.landmarks, result.imageWidth, result.imageHeight)
         viewModel.sendPoseData(result)
     }
 
     override fun onError(error: String) {
+        Log.e(TAG, "Pose error: $error")
         requireActivity().runOnUiThread {
-            Toast.makeText(requireContext(), "Pose error: $error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onHandResult(isClosed: Boolean) {
+        viewModel.updateHandState(isClosed)
+    }
+
+    override fun onHandError(error: String) {
+        Log.e(TAG, "Hand error: $error")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Close MediaPipe on the same executor thread it was created on
         cameraExecutor.execute {
             poseLandmarkerHelper?.close()
             poseLandmarkerHelper = null
+            handLandmarkerHelper?.close()
+            handLandmarkerHelper = null
         }
         cameraExecutor.shutdown()
         _binding = null

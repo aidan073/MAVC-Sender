@@ -26,12 +26,9 @@
         android:label="Pose Tracker"
         tools:layout="@layout/fragment_pose">
 
-        <argument
-            android:name="address"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
+        <argument android:name="address" app:argType="string" />
+        <argument android:name="port"    app:argType="integer" />
+        <argument android:name="armSide" app:argType="string" />
     </fragment>
 
 </navigation>

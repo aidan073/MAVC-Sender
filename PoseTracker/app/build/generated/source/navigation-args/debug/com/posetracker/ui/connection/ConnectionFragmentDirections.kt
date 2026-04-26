@@ -10,6 +10,7 @@ public class ConnectionFragmentDirections private constructor() {
   private data class ActionConnectionFragmentToPoseFragment(
     public val address: String,
     public val port: Int,
+    public val armSide: String,
   ) : NavDirections {
     public override val actionId: Int = R.id.action_connectionFragment_to_poseFragment
 
@@ -18,12 +19,16 @@ public class ConnectionFragmentDirections private constructor() {
         val result = Bundle()
         result.putString("address", this.address)
         result.putInt("port", this.port)
+        result.putString("armSide", this.armSide)
         return result
       }
   }
 
   public companion object {
-    public fun actionConnectionFragmentToPoseFragment(address: String, port: Int): NavDirections =
-        ActionConnectionFragmentToPoseFragment(address, port)
+    public fun actionConnectionFragmentToPoseFragment(
+      address: String,
+      port: Int,
+      armSide: String,
+    ): NavDirections = ActionConnectionFragmentToPoseFragment(address, port, armSide)
   }
 }

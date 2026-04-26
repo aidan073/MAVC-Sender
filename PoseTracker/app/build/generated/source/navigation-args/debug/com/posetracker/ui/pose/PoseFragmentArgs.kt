@@ -11,11 +11,13 @@ import kotlin.jvm.JvmStatic
 public data class PoseFragmentArgs(
   public val address: String,
   public val port: Int,
+  public val armSide: String,
 ) : NavArgs {
   public fun toBundle(): Bundle {
     val result = Bundle()
     result.putString("address", this.address)
     result.putInt("port", this.port)
+    result.putString("armSide", this.armSide)
     return result
   }
 
@@ -23,6 +25,7 @@ public data class PoseFragmentArgs(
     val result = SavedStateHandle()
     result.set("address", this.address)
     result.set("port", this.port)
+    result.set("armSide", this.armSide)
     return result
   }
 
@@ -45,7 +48,16 @@ public data class PoseFragmentArgs(
       } else {
         throw IllegalArgumentException("Required argument \"port\" is missing and does not have an android:defaultValue")
       }
-      return PoseFragmentArgs(__address, __port)
+      val __armSide : String?
+      if (bundle.containsKey("armSide")) {
+        __armSide = bundle.getString("armSide")
+        if (__armSide == null) {
+          throw IllegalArgumentException("Argument \"armSide\" is marked as non-null but was passed a null value.")
+        }
+      } else {
+        throw IllegalArgumentException("Required argument \"armSide\" is missing and does not have an android:defaultValue")
+      }
+      return PoseFragmentArgs(__address, __port, __armSide)
     }
 
     @JvmStatic
@@ -68,7 +80,16 @@ public data class PoseFragmentArgs(
       } else {
         throw IllegalArgumentException("Required argument \"port\" is missing and does not have an android:defaultValue")
       }
-      return PoseFragmentArgs(__address, __port)
+      val __armSide : String?
+      if (savedStateHandle.contains("armSide")) {
+        __armSide = savedStateHandle["armSide"]
+        if (__armSide == null) {
+          throw IllegalArgumentException("Argument \"armSide\" is marked as non-null but was passed a null value")
+        }
+      } else {
+        throw IllegalArgumentException("Required argument \"armSide\" is missing and does not have an android:defaultValue")
+      }
+      return PoseFragmentArgs(__address, __port, __armSide)
     }
   }
 }

@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.posetracker.R
 import com.posetracker.databinding.FragmentConnectionBinding
+import com.posetracker.ui.pose.ArmSide
 import kotlinx.coroutines.launch
 
 class ConnectionFragment : Fragment() {
@@ -34,9 +35,15 @@ class ConnectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Restore last-used values if available
+        // Restore saved values
         viewModel.lastAddress?.let { binding.etAddress.setText(it) }
-        viewModel.lastPort?.let { binding.etPort.setText(it) }
+        viewModel.lastPort?.let    { binding.etPort.setText(it) }
+
+        // Restore arm side toggle
+        when (viewModel.lastArmSide) {
+            ArmSide.LEFT  -> binding.toggleArm.check(R.id.btnLeft)
+            ArmSide.RIGHT -> binding.toggleArm.check(R.id.btnRight)
+        }
 
         binding.btnConnect.setOnClickListener {
             val address = binding.etAddress.text.toString().trim()
@@ -53,7 +60,6 @@ class ConnectionFragment : Fragment() {
                 binding.tilPort.error = "Port is required"
                 return@setOnClickListener
             }
-
             val port = portStr.toIntOrNull()
             if (port == null || port !in 1..65535) {
                 binding.tilPort.error = "Enter a valid port (1–65535)"
@@ -62,7 +68,10 @@ class ConnectionFragment : Fragment() {
                 binding.tilPort.error = null
             }
 
-            viewModel.connect(address, port)
+            val armSide = if (binding.toggleArm.checkedButtonId == R.id.btnLeft)
+                ArmSide.LEFT else ArmSide.RIGHT
+
+            viewModel.connect(address, port, armSide)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -71,27 +80,27 @@ class ConnectionFragment : Fragment() {
                     when (state) {
                         is ConnectionUiState.Idle -> {
                             binding.progressBar.isVisible = false
-                            binding.btnConnect.isEnabled = true
+                            binding.btnConnect.isEnabled  = true
                         }
                         is ConnectionUiState.Connecting -> {
                             binding.progressBar.isVisible = true
-                            binding.btnConnect.isEnabled = false
+                            binding.btnConnect.isEnabled  = false
                         }
                         is ConnectionUiState.Connected -> {
                             binding.progressBar.isVisible = false
-                            binding.btnConnect.isEnabled = true
-                            // Navigate to pose tracking screen, passing connection info
+                            binding.btnConnect.isEnabled  = true
                             val action = ConnectionFragmentDirections
                                 .actionConnectionFragmentToPoseFragment(
                                     address = state.address,
-                                    port = state.port
+                                    port    = state.port,
+                                    armSide = state.armSide.name
                                 )
                             findNavController().navigate(action)
                             viewModel.resetState()
                         }
                         is ConnectionUiState.Error -> {
                             binding.progressBar.isVisible = false
-                            binding.btnConnect.isEnabled = true
+                            binding.btnConnect.isEnabled  = true
                             Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                             viewModel.resetState()
                         }

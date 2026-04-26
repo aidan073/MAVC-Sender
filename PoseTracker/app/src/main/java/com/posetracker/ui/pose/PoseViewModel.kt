@@ -10,46 +10,71 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+enum class ArmSide { LEFT, RIGHT }
+
 class PoseViewModel : ViewModel() {
 
     private val _sendStatus = MutableStateFlow("Waiting for pose…")
     val sendStatus: StateFlow<String> = _sendStatus
 
+    var armSide: ArmSide = ArmSide.LEFT
+
+    // Updated by the hand landmarker independently of the pose landmarker
+    @Volatile private var isHandClosed: Boolean = false
+
     private var sequenceId = 0L
 
-    fun initialize(address: String, port: Int) {
-        // Socket already connected in ConnectionFragment.
+    fun initialize(address: String, port: Int) { }
+
+    fun updateHandState(closed: Boolean) {
+        isHandClosed = closed
     }
 
     fun sendPoseData(result: PoseLandmarkerHelper.PoseResult) {
         val landmarks = result.landmarks
         if (landmarks.size < 17) return
 
+        // Snapshot hand state at the moment this pose frame is sent
+        val handClosed = isHandClosed
+
         viewModelScope.launch {
-            val leftWrist  = landmarks[CommandEncoder.IDX_LEFT_WRIST]
-            val leftElbow  = landmarks[CommandEncoder.IDX_LEFT_ELBOW]
-            val leftFrame  = CommandEncoder.encode(
-                wrist       = Landmark(leftWrist.x(),  leftWrist.y(),  leftWrist.z()),
-                elbow       = Landmark(leftElbow.x(),  leftElbow.y(),  leftElbow.z()),
-                sequenceId  = sequenceId++,
-                timestampMs = result.timestampMs
-            )
-            val leftOk = SocketManager.sendBytes(leftFrame)
+            val shoulderIdx: Int
+            val elbowIdx: Int
+            val wristIdx: Int
 
-            val rightWrist = landmarks[CommandEncoder.IDX_RIGHT_WRIST]
-            val rightElbow = landmarks[CommandEncoder.IDX_RIGHT_ELBOW]
-            val rightFrame = CommandEncoder.encode(
-                wrist       = Landmark(rightWrist.x(), rightWrist.y(), rightWrist.z()),
-                elbow       = Landmark(rightElbow.x(), rightElbow.y(), rightElbow.z()),
-                sequenceId  = sequenceId++,
-                timestampMs = result.timestampMs
-            )
-            val rightOk = SocketManager.sendBytes(rightFrame)
-
-            _sendStatus.value = when {
-                leftOk && rightOk -> "Sent frame #${sequenceId / 2} (L+R)"
-                else              -> "Send failed (frame #${sequenceId / 2})"
+            when (armSide) {
+                ArmSide.LEFT -> {
+                    shoulderIdx = CommandEncoder.IDX_LEFT_SHOULDER
+                    elbowIdx    = CommandEncoder.IDX_LEFT_ELBOW
+                    wristIdx    = CommandEncoder.IDX_LEFT_WRIST
+                }
+                ArmSide.RIGHT -> {
+                    shoulderIdx = CommandEncoder.IDX_RIGHT_SHOULDER
+                    elbowIdx    = CommandEncoder.IDX_RIGHT_ELBOW
+                    wristIdx    = CommandEncoder.IDX_RIGHT_WRIST
+                }
             }
+
+            val shoulder = landmarks[shoulderIdx]
+            val elbow    = landmarks[elbowIdx]
+            val wrist    = landmarks[wristIdx]
+
+            val frame = CommandEncoder.encode(
+                shoulder    = Landmark(shoulder.x(), shoulder.y(), shoulder.z()),
+                elbow       = Landmark(elbow.x(),    elbow.y(),    elbow.z()),
+                wrist       = Landmark(wrist.x(),    wrist.y(),    wrist.z()),
+                imageWidth  = result.imageWidth,
+                imageHeight = result.imageHeight,
+                handClosed  = handClosed,
+                sequenceId  = sequenceId++,
+                timestampMs = result.timestampMs
+            )
+
+            val ok = SocketManager.sendBytes(frame)
+            _sendStatus.value = if (ok)
+                "Sent frame #$sequenceId (${armSide.name.lowercase()}, ${if (handClosed) "closed" else "open"})"
+            else
+                "Send failed (frame #$sequenceId)"
         }
     }
 

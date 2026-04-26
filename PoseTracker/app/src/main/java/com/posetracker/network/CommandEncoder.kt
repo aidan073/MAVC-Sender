@@ -2,87 +2,83 @@ package com.posetracker.network
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.math.sqrt
 
-/**
- * Encodes arm/hand pose data into the server's binary Command format.
- *
- * Wire format (little-endian, 44 bytes total):
- *   H  magic          2 bytes  — fixed 0x073CD (29645)
- *   B  version        1 byte
- *   I  sequence_id    4 bytes
- *   d  timestamp      8 bytes  — seconds as double
- *   f  palm_pos x     4 bytes  \
- *   f  palm_pos y     4 bytes   } wrist landmark (normalised 0..1)
- *   f  palm_pos z     4 bytes  /
- *   f  palm_ori x     4 bytes  \
- *   f  palm_ori y     4 bytes   } elbow→wrist direction vector
- *   f  palm_ori z     4 bytes  /
- *   f  grip_amount    4 bytes  — always 0.0 (Pose doesn't track finger curl)
- *   B  checksum       1 byte   — XOR of all preceding 43 bytes
- *
- * MediaPipe landmark indices used:
- *   15 = left wrist   16 = right wrist
- *   13 = left elbow   14 = right elbow
- */
 object CommandEncoder {
 
-    private const val MAGIC: Int      = 0x073CD   // 29645 — fits in UShort
+    private const val MAGIC: Int      = 0x073CD
     private const val VERSION: Int    = 1
     private const val FRAME_SIZE: Int = 44
 
-    // Use left arm by default; call encode() with isRight=true for right arm.
-    const val IDX_LEFT_WRIST  = 15
-    const val IDX_LEFT_ELBOW  = 13
-    const val IDX_RIGHT_WRIST = 16
-    const val IDX_RIGHT_ELBOW = 14
+    const val IDX_LEFT_SHOULDER  = 11
+    const val IDX_LEFT_ELBOW     = 13
+    const val IDX_LEFT_WRIST     = 15
+    const val IDX_RIGHT_SHOULDER = 12
+    const val IDX_RIGHT_ELBOW    = 14
+    const val IDX_RIGHT_WRIST    = 16
 
     data class Landmark(val x: Float, val y: Float, val z: Float)
 
+    private fun dist(a: Landmark, b: Landmark): Float {
+        val dx = a.x - b.x
+        val dy = a.y - b.y
+        val dz = a.z - b.z
+        return sqrt(dx * dx + dy * dy + dz * dz)
+    }
+
+    private fun scaleLandmark(lm: Landmark, imageWidth: Int, imageHeight: Int): Landmark {
+        val aspect = imageWidth.toFloat() / imageHeight.toFloat()
+        return Landmark(lm.x * aspect, lm.y, lm.z * aspect)
+    }
+
     /**
-     * Encodes one arm's data into a 44-byte Command frame.
+     * Encodes arm pose + hand state into a 44-byte Command frame.
      *
-     * @param wrist       Wrist landmark (used as palm position).
-     * @param elbow       Elbow landmark (used to derive palm orientation).
-     * @param sequenceId  Monotonically increasing frame counter.
-     * @param timestampMs Frame timestamp in milliseconds.
+     * grip_amount encodes the hand boolean:
+     *   1.0f = hand closed
+     *   0.0f = hand open
      */
     fun encode(
-        wrist: Landmark,
+        shoulder: Landmark,
         elbow: Landmark,
+        wrist: Landmark,
+        imageWidth: Int,
+        imageHeight: Int,
+        handClosed: Boolean,
         sequenceId: Long,
         timestampMs: Long
     ): ByteArray {
+        val ss = scaleLandmark(shoulder, imageWidth, imageHeight)
+        val es = scaleLandmark(elbow,    imageWidth, imageHeight)
+        val ws = scaleLandmark(wrist,    imageWidth, imageHeight)
+
+        val armLength = dist(ss, es) + dist(es, ws)
+        val scale = if (armLength > 0f) 1f / armLength else 1f
+
+        val px = (ws.x - ss.x) * scale
+        val py = (ws.y - ss.y) * scale
+        val pz = (ws.z - ss.z) * scale
+
+        val ox = (ws.x - es.x) * scale
+        val oy = (ws.y - es.y) * scale
+        val oz = (ws.z - es.z) * scale
+
         val buf = ByteBuffer.allocate(FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
+        buf.putShort(MAGIC.toShort())
+        buf.put(VERSION.toByte())
+        buf.putInt((sequenceId and 0xFFFFFFFFL).toInt())
+        buf.putDouble(timestampMs / 1000.0)
+        buf.putFloat(px)
+        buf.putFloat(py)
+        buf.putFloat(pz)
+        buf.putFloat(ox)
+        buf.putFloat(oy)
+        buf.putFloat(oz)
+        buf.putFloat(if (handClosed) 1.0f else 0.0f)  // grip_amount: 1.0=closed, 0.0=open
 
-        // palm_position — wrist coords
-        val px = wrist.x
-        val py = wrist.y
-        val pz = wrist.z
-
-        // palm_orientation — elbow→wrist direction vector (not normalised; matches server expectation)
-        val ox = wrist.x - elbow.x
-        val oy = wrist.y - elbow.y
-        val oz = wrist.z - elbow.z
-
-        val timestampSec = timestampMs / 1000.0
-
-        // Pack fields (43 bytes of payload)
-        buf.putShort(MAGIC.toShort())                  // H  magic
-        buf.put(VERSION.toByte())                      // B  version
-        buf.putInt((sequenceId and 0xFFFFFFFFL).toInt()) // I  sequence_id
-        buf.putDouble(timestampSec)                    // d  timestamp
-        buf.putFloat(px)                               // f  palm_pos x
-        buf.putFloat(py)                               // f  palm_pos y
-        buf.putFloat(pz)                               // f  palm_pos z
-        buf.putFloat(ox)                               // f  palm_ori x
-        buf.putFloat(oy)                               // f  palm_ori y
-        buf.putFloat(oz)                               // f  palm_ori z
-        buf.putFloat(0.0f)                             // f  grip_amount
-
-        // XOR checksum over the 43 payload bytes
         val payload = buf.array().copyOf(FRAME_SIZE - 1)
         val checksum = payload.fold(0) { acc, b -> acc xor (b.toInt() and 0xFF) }.toByte()
-        buf.put(checksum)                              // B  checksum
+        buf.put(checksum)
 
         return buf.array()
     }
