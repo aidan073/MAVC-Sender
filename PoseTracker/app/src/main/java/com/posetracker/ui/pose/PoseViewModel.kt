@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.posetracker.network.CommandEncoder
 import com.posetracker.network.CommandEncoder.Landmark
 import com.posetracker.network.SocketManager
+import com.posetracker.utils.HandLandmarkerHelper.HandEuler
 import com.posetracker.utils.PoseLandmarkerHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,23 +20,24 @@ class PoseViewModel : ViewModel() {
 
     var armSide: ArmSide = ArmSide.LEFT
 
-    // Updated by the hand landmarker independently of the pose landmarker
     @Volatile private var isHandClosed: Boolean = false
+    @Volatile private var handEuler: HandEuler? = null
 
     private var sequenceId = 0L
 
     fun initialize(address: String, port: Int) { }
 
-    fun updateHandState(closed: Boolean) {
+    fun updateHandState(closed: Boolean, euler: HandEuler?) {
         isHandClosed = closed
+        handEuler    = euler
     }
 
     fun sendPoseData(result: PoseLandmarkerHelper.PoseResult) {
         val landmarks = result.landmarks
         if (landmarks.size < 17) return
 
-        // Snapshot hand state at the moment this pose frame is sent
         val handClosed = isHandClosed
+        val euler      = handEuler
 
         viewModelScope.launch {
             val shoulderIdx: Int
@@ -66,6 +68,7 @@ class PoseViewModel : ViewModel() {
                 imageWidth  = result.imageWidth,
                 imageHeight = result.imageHeight,
                 handClosed  = handClosed,
+                handEuler   = euler,
                 sequenceId  = sequenceId++,
                 timestampMs = result.timestampMs
             )

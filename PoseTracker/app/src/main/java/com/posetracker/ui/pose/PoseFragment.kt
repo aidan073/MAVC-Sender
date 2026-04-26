@@ -173,8 +173,8 @@ class PoseFragment : Fragment(),
         }
     }
 
-    override fun onHandResult(isClosed: Boolean) {
-        viewModel.updateHandState(isClosed)
+    override fun onHandResult(isClosed: Boolean, euler: com.posetracker.utils.HandLandmarkerHelper.HandEuler?) {
+        viewModel.updateHandState(isClosed, euler)
     }
 
     override fun onHandError(error: String) {

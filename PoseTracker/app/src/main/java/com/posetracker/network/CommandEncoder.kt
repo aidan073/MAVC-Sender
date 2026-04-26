@@ -1,5 +1,6 @@
 package com.posetracker.network
 
+import com.posetracker.utils.HandLandmarkerHelper.HandEuler
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.sqrt
@@ -32,11 +33,12 @@ object CommandEncoder {
     }
 
     /**
-     * Encodes arm pose + hand state into a 44-byte Command frame.
+     * Encodes one arm frame into 44 bytes.
      *
-     * grip_amount encodes the hand boolean:
-     *   1.0f = hand closed
-     *   0.0f = hand open
+     * palm_position    = (wrist - shoulder) / armLength  — shoulder-relative, arm-normalised
+     * palm_orientation = (roll, pitch, yaw) in radians from hand landmarker ZYX Euler angles.
+     *                    Sends (0, 0, 0) if hand is not visible.
+     * grip_amount      = 1.0 if hand closed, 0.0 if open
      */
     fun encode(
         shoulder: Landmark,
@@ -45,6 +47,7 @@ object CommandEncoder {
         imageWidth: Int,
         imageHeight: Int,
         handClosed: Boolean,
+        handEuler: HandEuler?,
         sequenceId: Long,
         timestampMs: Long
     ): ByteArray {
@@ -55,13 +58,16 @@ object CommandEncoder {
         val armLength = dist(ss, es) + dist(es, ws)
         val scale = if (armLength > 0f) 1f / armLength else 1f
 
+        // Palm position: wrist relative to shoulder, normalised by arm length
         val px = (ws.x - ss.x) * scale
         val py = (ws.y - ss.y) * scale
         val pz = (ws.z - ss.z) * scale
 
-        val ox = (ws.x - es.x) * scale
-        val oy = (ws.y - es.y) * scale
-        val oz = (ws.z - es.z) * scale
+        // Palm orientation: ZYX Euler angles in radians.
+        // (0, 0, 0) when hand is not visible.
+        val ox = handEuler?.roll  ?: 0f
+        val oy = handEuler?.pitch ?: 0f
+        val oz = handEuler?.yaw   ?: 0f
 
         val buf = ByteBuffer.allocate(FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
         buf.putShort(MAGIC.toShort())
@@ -71,10 +77,10 @@ object CommandEncoder {
         buf.putFloat(px)
         buf.putFloat(py)
         buf.putFloat(pz)
-        buf.putFloat(ox)
-        buf.putFloat(oy)
-        buf.putFloat(oz)
-        buf.putFloat(if (handClosed) 1.0f else 0.0f)  // grip_amount: 1.0=closed, 0.0=open
+        buf.putFloat(ox)   // roll
+        buf.putFloat(oy)   // pitch
+        buf.putFloat(oz)   // yaw
+        buf.putFloat(if (handClosed) 1.0f else 0.0f)
 
         val payload = buf.array().copyOf(FRAME_SIZE - 1)
         val checksum = payload.fold(0) { acc, b -> acc xor (b.toInt() and 0xFF) }.toByte()

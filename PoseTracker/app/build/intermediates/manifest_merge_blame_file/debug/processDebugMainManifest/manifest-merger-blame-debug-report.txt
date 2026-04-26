@@ -10,18 +10,18 @@
 10
 11    <!-- Permissions -->
 12    <uses-permission android:name="android.permission.CAMERA" />
-12-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:5:5-65
-12-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:5:22-62
+12-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:5:5-65
+12-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:5:22-62
 13    <uses-permission android:name="android.permission.INTERNET" />
-13-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:6:5-67
-13-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:6:22-64
+13-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:6:5-67
+13-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:6:22-64
 14
 15    <uses-feature
-15-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:5-84
+15-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:5-84
 16        android:name="android.hardware.camera"
-16-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:19-57
+16-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:19-57
 17        android:required="true" />
-17-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:58-81
+17-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:8:58-81
 18
 19    <permission
 19-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
@@ -39,41 +39,41 @@
 25-->[com.google.android.datatransport:transport-backend-cct:3.1.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\5e57fce8365cf219e6b721353046b036\transformed\transport-backend-cct-3.1.0\AndroidManifest.xml:25:22-76
 26
 27    <application
-27-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:10:5-28:19
+27-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:10:5-28:19
 28        android:allowBackup="true"
-28-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:11:9-35
+28-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:11:9-35
 29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 29-->[androidx.core:core:1.12.0] C:\Users\nelso\.gradle\caches\9.0.0\transforms\b12fbdb14883baaae13b7c05e33ccda2\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 30        android:debuggable="true"
 31        android:extractNativeLibs="false"
 32        android:icon="@mipmap/ic_launcher"
-32-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:12:9-43
+32-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:12:9-43
 33        android:label="@string/app_name"
-33-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:13:9-41
+33-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:13:9-41
 34        android:roundIcon="@mipmap/ic_launcher_round"
-34-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:14:9-54
+34-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:14:9-54
 35        android:supportsRtl="true"
-35-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:15:9-35
+35-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:15:9-35
 36        android:testOnly="true"
 37        android:theme="@style/Theme.PoseTracker" >
-37-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:16:9-49
+37-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:16:9-49
 38        <activity
-38-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:18:9-26:20
+38-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:18:9-26:20
 39            android:name="com.posetracker.MainActivity"
-39-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:19:13-41
+39-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:19:13-41
 40            android:exported="true"
-40-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:20:13-36
+40-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:20:13-36
 41            android:screenOrientation="portrait" >
-41-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:21:13-49
+41-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:21:13-49
 42            <intent-filter>
-42-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:22:13-25:29
+42-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:22:13-25:29
 43                <action android:name="android.intent.action.MAIN" />
-43-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:23:17-69
-43-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:23:25-66
+43-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:23:17-69
+43-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:23:25-66
 44
 45                <category android:name="android.intent.category.LAUNCHER" />
-45-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:24:17-77
-45-->C:\Users\nelso\Documents\GitHub\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:24:27-74
+45-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:24:17-77
+45-->C:\Users\nelso\MAVC-Sender\PoseTracker\app\src\main\AndroidManifest.xml:24:27-74
 46            </intent-filter>
 47        </activity>
 48
